@@ -25,8 +25,8 @@ main{margin:0 auto;padding:28px 40px 64px;max-width:1400px}[hidden]{display:none
 .viewer-hint{margin:0;padding:10px;text-align:center;font-size:11px;color:#c4d5df}
 @media(max-width:600px){.viewer-bar{padding:12px}.viewer-name{max-width:100%;width:100%}.viewer-tools{width:100%;justify-content:center}.viewer button{padding:9px 11px}}
 
-.menu{cursor:grab;user-select:none;-webkit-user-select:none;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:#99b4c4 transparent;touch-action:pan-x pan-y pinch-zoom}
-.menu a{cursor:inherit;-webkit-user-drag:none}.menu.is-dragging,.menu.is-dragging a{cursor:grabbing}
+.menu{cursor:pointer;user-select:none;-webkit-user-select:none;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:#99b4c4 transparent;touch-action:pan-x pan-y pinch-zoom}
+.menu a{cursor:pointer;-webkit-user-drag:none}.menu.is-dragging,.menu.is-dragging a{cursor:pointer}
 
 /* Uniform square thumbnails; the viewer still displays the full original. */
 .media img{width:100%;height:auto;aspect-ratio:1 / 1;object-fit:cover;object-position:center;border-radius:14px}
@@ -427,6 +427,7 @@ showAvatar();
 </script>
 </body>
 </html>
+
 
 
 
