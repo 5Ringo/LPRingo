@@ -24,6 +24,12 @@ main{margin:0 auto;padding:28px 40px 64px;max-width:1400px}[hidden]{display:none
 .viewer-stage img{position:absolute;top:50%;left:50%;display:block;max-width:94%;max-height:94%;width:auto;height:auto;object-fit:contain;transform-origin:center;user-select:none;pointer-events:none;border-radius:14px;will-change:transform}
 .viewer-hint{margin:0;padding:10px;text-align:center;font-size:11px;color:#c4d5df}
 @media(max-width:600px){.viewer-bar{padding:12px}.viewer-name{max-width:100%;width:100%}.viewer-tools{width:100%;justify-content:center}.viewer button{padding:9px 11px}}
+
+.menu{cursor:grab;user-select:none;-webkit-user-select:none;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:#99b4c4 transparent;touch-action:pan-x pan-y pinch-zoom}
+.menu a{cursor:inherit;-webkit-user-drag:none}.menu.is-dragging,.menu.is-dragging a{cursor:grabbing}
+
+/* Uniform square thumbnails; the viewer still displays the full original. */
+.media img{width:100%;height:auto;aspect-ratio:1 / 1;object-fit:cover;object-position:center;border-radius:14px}
 </style>
 </head>
 <body>
@@ -35,7 +41,7 @@ main{margin:0 auto;padding:28px 40px 64px;max-width:1400px}[hidden]{display:none
     <button type="button" id="zoom-reset">화면 맞춤</button><button type="button" id="viewer-close" aria-label="사진 뷰어 닫기">닫기 ×</button>
   </div></div>
   <div class="viewer-stage" id="viewer-stage"><img id="viewer-image" alt="" draggable="false"></div>
-  <p class="viewer-hint">휠·두 손가락으로 확대 / 드래그로 이동 / Esc로 닫기</p>
+  <p class="viewer-hint">휠·두 손가락으로 확대 / 드래그로 이동 / 사진 클릭 또는 Esc로 닫기</p>
 </dialog>
 <noscript>이 페이지를 보려면 브라우저의 JavaScript를 켜 주세요.</noscript>
 <script>
@@ -56,17 +62,17 @@ const avatars = [
       {
         "type": "image",
         "src": "media/vichan-mars-01.png",
-        "caption": "아바타 본구성•리깅"
+        "caption": "의상 본구성 • 리깅"
       },
       {
         "type": "image",
         "src": "media/vichan-mars-02.png",
-        "caption": "매지카클로스 2 / 닐로툰세팅"
+        "caption": "매지카 클로스 2 • 닐로툰세팅"
       },
       {
         "type": "video",
         "src": "media/vichan-mars-03.mp4",
-        "caption": ""
+        "caption": "MMD 모션 확인"
       }
     ]
   },
@@ -74,41 +80,174 @@ const avatars = [
     "id": "avatar-02",
     "name": "비챤-한복",
     "description": "",
-    "media": []
+    "media": [
+      {
+        "type": "image",
+        "src": "media/vichan-hanbok-01.png",
+        "caption": "의상 본구성 • 리깅"
+      },
+      {
+        "type": "image",
+        "src": "media/vichan-hanbok-02.png",
+        "caption": "매지카 클로스 2 • 닐로툰세팅"
+      },
+      {
+        "type": "video",
+        "src": "media/vichan-hanbok-03.mp4",
+        "caption": "MMD 모션 확인"
+      }
+    ]
   },
   {
     "id": "avatar-03",
     "name": "비챤-화이트",
     "description": "",
-    "media": []
+    "media": [
+      {
+        "type": "image",
+        "src": "media/vichan-white-01.png",
+        "caption": "매지카 클로스 2 • 닐로툰세팅"
+      },
+      {
+        "type": "video",
+        "src": "media/vichan-white-02.mp4",
+        "caption": "MMD 모션 확인"
+      }
+    ]
   },
   {
     "id": "avatar-04",
     "name": "비챤-니케 마린룩",
     "description": "",
-    "media": []
+    "media": [
+      {
+        "type": "image",
+        "src": "media/vichan-marine-01.png",
+        "caption": "의상 본구성 • 리깅"
+      },
+      {
+        "type": "image",
+        "src": "media/vichan-marine-02.png",
+        "caption": "매지카 클로스 2"
+      },
+      {
+        "type": "video",
+        "src": "media/vichan-marine-03.mp4",
+        "caption": "MMD 모션 확인"
+      }
+    ]
   },
   {
     "id": "avatar-05",
     "name": "비챤-니케 비키니",
     "description": "",
-    "media": []
+    "media": [
+      {
+        "type": "image",
+        "src": "media/vichan-bikini-01.png",
+        "caption": "의상 본구성 • 리깅"
+      },
+      {
+        "type": "image",
+        "src": "media/vichan-bikini-02.png",
+        "caption": "매지카 클로스 2"
+      },
+      {
+        "type": "video",
+        "src": "media/vichan-bikini-03.mp4",
+        "caption": "MMD 모션 확인"
+      }
+    ]
   },
   {
     "id": "avatar-06",
     "name": "비챤-트리",
     "description": "",
-    "media": []
+    "media": [
+      {
+        "type": "image",
+        "src": "media/vichan-tree-01.png",
+        "caption": "의상 본구성 • 리깅"
+      },
+      {
+        "type": "video",
+        "src": "media/vichan-tree-02.mp4",
+        "caption": "MMD 모션 확인"
+      }
+    ]
   },
   {
     "id": "avatar-07",
     "name": "고세구-치어리더",
     "description": "",
-    "media": []
+    "media": [
+      {
+        "type": "image",
+        "src": "media/gosegu-cheerleader-01.png",
+        "caption": "의상,헤어 본구성 • 리깅"
+      },
+      {
+        "type": "image",
+        "src": "media/gosegu-cheerleader-02.png",
+        "caption": "매지카 클로스 2 + 스프링 본"
+      },
+      {
+        "type": "video",
+        "src": "media/gosegu-cheerleader-03.mp4",
+        "caption": "MMD 모션 확인"
+      }
+    ]
   }
 ];
 const menu = document.getElementById("menu");
 const content = document.getElementById("content");
+// Touch uses the browser's native swipe; mouse and pen use drag-to-scroll.
+let menuDrag = null;
+let suppressMenuClick = false;
+let menuClickReset;
+menu.addEventListener('pointerdown', event => {
+  if (event.pointerType === 'touch' || event.button !== 0 || !event.isPrimary) return;
+  if (menu.scrollWidth <= menu.clientWidth) return;
+  clearTimeout(menuClickReset);
+  suppressMenuClick = false;
+  menuDrag = {id:event.pointerId, x:event.clientX, scroll:menu.scrollLeft, moved:false};
+});
+menu.addEventListener('pointermove', event => {
+  if (!menuDrag || event.pointerId !== menuDrag.id) return;
+  if (!(event.buttons & 1)) { finishMenuDrag(event); return; }
+  const distance = event.clientX - menuDrag.x;
+  if (!menuDrag.moved && Math.abs(distance) < 6) return;
+  if (!menuDrag.moved) {
+    menuDrag.moved = true;
+    menu.classList.add('is-dragging');
+    menu.setPointerCapture(event.pointerId);
+  }
+  event.preventDefault();
+  menu.scrollLeft = menuDrag.scroll - distance;
+});
+function finishMenuDrag(event) {
+  if (!menuDrag || event.pointerId !== menuDrag.id) return;
+  const wasMoved = menuDrag.moved;
+  menuDrag = null;
+  menu.classList.remove('is-dragging');
+  if (menu.hasPointerCapture(event.pointerId)) menu.releasePointerCapture(event.pointerId);
+  if (wasMoved) {
+    suppressMenuClick = true;
+    menuClickReset = setTimeout(() => { suppressMenuClick = false; }, 0);
+  }
+}
+['pointerup','pointercancel','lostpointercapture'].forEach(type => menu.addEventListener(type, finishMenuDrag));
+menu.addEventListener('pointerleave', event => {
+  if (menuDrag && !menuDrag.moved) finishMenuDrag(event);
+});
+menu.addEventListener('dragstart', event => event.preventDefault());
+menu.addEventListener('click', event => {
+  if (suppressMenuClick && event.detail !== 0) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    suppressMenuClick = false;
+  }
+}, true);
 const element = (tag, className, text) => {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -118,6 +257,7 @@ const element = (tag, className, text) => {
 avatars.forEach(avatar => {
   const link = element("a", "", avatar.name);
   link.href = "#" + avatar.id;
+  link.draggable = false;
   menu.append(link);
   const section = element("section", "avatar");
   section.id = avatar.id;
@@ -193,6 +333,11 @@ const zoomIn = document.getElementById('zoom-in');
 const zoomOut = document.getElementById('zoom-out');
 let scale = 1, offsetX = 0, offsetY = 0, opener = null;
 const pointers = new Map();
+let photoTap = null;
+function isOnViewerPhoto(x, y) {
+  const rect = viewerImage.getBoundingClientRect();
+  return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+}
 function renderZoom() {
   viewerImage.style.transform = 'translate(-50%,-50%) translate(' + offsetX + 'px,' + offsetY + 'px) scale(' + scale + ')';
   document.getElementById('zoom-level').textContent = scale.toFixed(1) + '×';
@@ -211,7 +356,7 @@ function openViewer(image) {
   document.getElementById('viewer-name').textContent = image.alt;
   viewerImage.src = image.currentSrc || image.src;
   viewerImage.alt = image.alt;
-  scale = 1; offsetX = offsetY = 0; pointers.clear(); renderZoom();
+  scale = 1; offsetX = offsetY = 0; pointers.clear(); photoTap = null; renderZoom();
   document.querySelectorAll('video').forEach(video => video.pause());
   viewer.showModal();
   document.body.style.overflow = 'hidden';
@@ -220,7 +365,7 @@ function openViewer(image) {
 document.getElementById('viewer-close').addEventListener('click', () => viewer.close());
 viewer.addEventListener('close', () => {
   document.body.style.overflow = '';
-  pointers.clear(); viewerImage.removeAttribute('src');
+  pointers.clear(); photoTap = null; viewerImage.removeAttribute('src');
   if (opener && opener.isConnected) opener.focus();
 });
 zoomIn.addEventListener('click', () => changeZoom(scale * 1.25));
@@ -238,6 +383,9 @@ stage.addEventListener('wheel', event => {
 }, {passive:false});
 stage.addEventListener('pointerdown', event => {
   if (event.pointerType === 'mouse' && event.button !== 0) return;
+  if (pointers.size === 0) {
+    photoTap = {x:event.clientX,y:event.clientY,moved:false,multi:false,onPhoto:isOnViewerPhoto(event.clientX,event.clientY)};
+  } else if (photoTap) photoTap.multi = true;
   pointers.set(event.pointerId, {x:event.clientX,y:event.clientY});
   stage.setPointerCapture(event.pointerId);
 });
@@ -245,6 +393,7 @@ stage.addEventListener('pointermove', event => {
   const old = pointers.get(event.pointerId);
   if (!old) return;
   const next = {x:event.clientX,y:event.clientY};
+  if (photoTap && Math.hypot(next.x-photoTap.x,next.y-photoTap.y) > 6) photoTap.moved = true;
   if (pointers.size === 2) {
     const other = [...pointers.entries()].find(([id]) => id !== event.pointerId)[1];
     const before = Math.hypot(old.x-other.x,old.y-other.y);
@@ -256,13 +405,26 @@ stage.addEventListener('pointermove', event => {
   }
   pointers.set(event.pointerId, next); renderZoom();
 });
-['pointerup','pointercancel','lostpointercapture'].forEach(type => stage.addEventListener(type, event => pointers.delete(event.pointerId)));
+stage.addEventListener('pointerup', event => {
+  const tap = photoTap;
+  const shouldClose = pointers.has(event.pointerId) && pointers.size === 1 && tap && tap.onPhoto && !tap.moved && !tap.multi
+    && Math.hypot(event.clientX-tap.x,event.clientY-tap.y) <= 6 && isOnViewerPhoto(event.clientX,event.clientY);
+  pointers.delete(event.pointerId);
+  if (!pointers.size) photoTap = null;
+  if (shouldClose) viewer.close();
+});
+['pointercancel','lostpointercapture'].forEach(type => stage.addEventListener(type, event => {
+  pointers.delete(event.pointerId);
+  photoTap = null;
+}));
 window.addEventListener('resize', () => { if (viewer.open) changeZoom(1); });
 window.addEventListener("hashchange", showAvatar);
 showAvatar();
 </script>
 </body>
 </html>
+
+
 
 
 
