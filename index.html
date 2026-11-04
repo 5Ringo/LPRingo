@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#e4eff4">
+<title>RINGO PORTFOLIO</title>
+<style>
+*{box-sizing:border-box}html{color-scheme:light}body{margin:0;background:#e4eff4;color:#304b5b;font-family:Arial,"Malgun Gothic",sans-serif}a{color:inherit;text-decoration:none}a:focus-visible{outline:2px solid #456d83;outline-offset:5px}
+.topbar{max-width:1400px;margin:0 auto;padding:32px 40px 22px}.topbar h1{margin:0 0 18px;font-size:12px;font-weight:700;letter-spacing:.12em;color:#607d8e}.menu{display:flex;flex-direction:row;gap:10px;overflow-x:auto;padding:5px 3px 12px}.menu a{flex:0 0 auto;padding:11px 20px;font-size:15px;color:#526e7f;line-height:1.5;border-radius:8px;white-space:nowrap}.menu a:hover{background:#d7e6ee}.menu a[aria-current="page"]{background:#45697f;color:#fff}
+main{margin:0 auto;padding:28px 40px 64px;max-width:1400px}[hidden]{display:none!important}.avatar h2{font-size:23px;text-align:left;font-weight:500;margin:0 0 16px;overflow-wrap:anywhere}.description{margin:0 0 30px;font-size:14px;color:#587283;line-height:1.8;white-space:pre-line;overflow-wrap:anywhere}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 20px}figure{margin:0;min-width:0}.media{aspect-ratio:16/10;background:#d4e3ec;display:grid;place-items:center;overflow:hidden;border-radius:10px}.media img,.media video{display:block;width:100%;height:100%;min-height:0;object-fit:contain;background:#d4e3ec}.placeholder{color:#5c798c;font-size:12px;letter-spacing:.04em}figcaption{margin-top:12px;font-size:14px;line-height:1.8;color:#506e80;white-space:pre-line;overflow-wrap:anywhere}
+@media(max-width:900px){.topbar{padding:26px 24px 16px}main{padding:22px 24px 48px}.grid{gap:26px 14px}}
+@media(max-width:600px){.topbar{padding:22px 16px 12px}.topbar h1{margin-bottom:12px}.menu{gap:6px}.menu a{padding:10px 14px;font-size:13px}main{padding:20px 16px 40px}.avatar h2{font-size:19px}.description{margin-bottom:24px;font-size:12px}.grid{gap:24px 10px}.media{border-radius:7px}figcaption{font-size:12px;margin-top:8px}.placeholder{font-size:10px}}
+
+.topbar h1{font-weight:400;font-size:15px}.topbar h1 strong{font-weight:800}
+.grid{align-items:start}.media{aspect-ratio:auto;display:block;background:transparent;border-radius:0;overflow:visible}
+.media img,.media video{height:auto;min-height:0;object-fit:initial;background:transparent;border-radius:14px}
+.media img{cursor:zoom-in}.media img:focus-visible{outline:2px solid #456d83;outline-offset:5px}
+.description,figcaption{text-align:center}
+.viewer{position:fixed;inset:0;width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:rgba(20,35,46,.94);color:white;overflow:hidden}
+.viewer::backdrop{background:rgba(20,35,46,.8)}
+.viewer[open]{display:flex;flex-direction:column}.viewer-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;flex-wrap:wrap;background:#203542;z-index:1}
+.viewer-name{font-size:13px;max-width:50%;overflow-wrap:anywhere}.viewer-tools{display:flex;gap:8px;align-items:center}.viewer button{border:1px solid #708695;border-radius:6px;background:transparent;color:#fff;padding:9px 12px;cursor:pointer;font:inherit;font-size:13px}.viewer button:disabled{opacity:.35;cursor:default}.viewer button:focus-visible{outline:2px solid #b9e3fc;outline-offset:2px}.viewer output{font-size:12px;min-width:36px;text-align:center}
+.viewer-stage{position:relative;flex:1;min-height:0;display:grid;place-items:center;overflow:hidden;touch-action:none;cursor:grab;user-select:none}.viewer-stage:active{cursor:grabbing}
+.viewer-stage img{position:absolute;top:50%;left:50%;display:block;max-width:94%;max-height:94%;width:auto;height:auto;object-fit:contain;transform-origin:center;user-select:none;pointer-events:none;border-radius:14px;will-change:transform}
+.viewer-hint{margin:0;padding:10px;text-align:center;font-size:11px;color:#c4d5df}
+@media(max-width:600px){.viewer-bar{padding:12px}.viewer-name{max-width:100%;width:100%}.viewer-tools{width:100%;justify-content:center}.viewer button{padding:9px 11px}}
+</style>
+</head>
+<body>
+<header class="topbar"><h1>RINGO <strong>PORTFOLIO</strong></h1><nav class="menu" aria-label="아바타 선택" id="menu"></nav></header>
+<main id="content"></main>
+<dialog class="viewer" id="viewer" aria-labelledby="viewer-name">
+  <div class="viewer-bar"><span class="viewer-name" id="viewer-name"></span><div class="viewer-tools">
+    <button type="button" id="zoom-out" aria-label="축소">−</button><output id="zoom-level" aria-live="polite">1.0×</output><button type="button" id="zoom-in" aria-label="확대">+</button>
+    <button type="button" id="zoom-reset">화면 맞춤</button><button type="button" id="viewer-close" aria-label="사진 뷰어 닫기">닫기 ×</button>
+  </div></div>
+  <div class="viewer-stage" id="viewer-stage"><img id="viewer-image" alt="" draggable="false"></div>
+  <p class="viewer-hint">휠·두 손가락으로 확대 / 드래그로 이동 / Esc로 닫기</p>
+</dialog>
+<noscript>이 페이지를 보려면 브라우저의 JavaScript를 켜 주세요.</noscript>
+<script>
+/* ── 여기만 수정하세요 ───────────────────────────────
+ name: 아바타 이름 / description: 소개 / caption: 각 칸 아래의 글
+ 사진·GIF 예시: { type: "image", src: "media/photo.jpg", caption: "설명" }
+ 영상 예시: { type: "video", src: "media/clip.mp4", caption: "설명" }
+ src를 비우면 해당 칸은 표시하지 않습니다. 글을 ""로 비우면 설명이 숨겨집니다.
+ media 항목을 복사하면 칸이 2열로 추가됩니다.
+ 아바타 객체 전체를 복사하면 메뉴가 추가됩니다. id는 서로 다르게 지정하세요.
+────────────────────────────────────────────────── */
+const avatars = [
+  {
+    "id": "avatar-01",
+    "name": "비챤-화성",
+    "description": "",
+    "media": [
+      {
+        "type": "image",
+        "src": "media/vichan-mars-01.png",
+        "caption": "아바타 본구성•리깅"
+      },
+      {
+        "type": "image",
+        "src": "media/vichan-mars-02.png",
+        "caption": "매지카클로스 2 / 닐로툰세팅"
+      },
+      {
+        "type": "video",
+        "src": "media/vichan-mars-03.mp4",
+        "caption": ""
+      }
+    ]
+  },
+  {
+    "id": "avatar-02",
+    "name": "비챤-한복",
+    "description": "",
+    "media": []
+  },
+  {
+    "id": "avatar-03",
+    "name": "비챤-화이트",
+    "description": "",
+    "media": []
+  },
+  {
+    "id": "avatar-04",
+    "name": "비챤-니케 마린룩",
+    "description": "",
+    "media": []
+  },
+  {
+    "id": "avatar-05",
+    "name": "비챤-니케 비키니",
+    "description": "",
+    "media": []
+  },
+  {
+    "id": "avatar-06",
+    "name": "비챤-트리",
+    "description": "",
+    "media": []
+  },
+  {
+    "id": "avatar-07",
+    "name": "고세구-치어리더",
+    "description": "",
+    "media": []
+  }
+];
+const menu = document.getElementById("menu");
+const content = document.getElementById("content");
+const element = (tag, className, text) => {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text) node.textContent = text;
+  return node;
+};
+avatars.forEach(avatar => {
+  const link = element("a", "", avatar.name);
+  link.href = "#" + avatar.id;
+  menu.append(link);
+  const section = element("section", "avatar");
+  section.id = avatar.id;
+  const title = element("h2", "", avatar.name);
+  title.id = avatar.id + "-title";
+  section.setAttribute("aria-labelledby", title.id);
+  section.append(title);
+  if (avatar.description) section.append(element("p", "description", avatar.description));
+  const grid = element("div", "grid");
+  avatar.media.filter(item => item.src && item.src.trim()).forEach((item, index) => {
+    const figure = element("figure");
+    const frame = element("div", "media");
+    const placeholder = element("span", "placeholder", "사진 / 영상 / GIF");
+    frame.append(placeholder);
+    if (item.src) {
+      const media = element(item.type === "video" ? "video" : "img");
+      const label = item.caption || avatar.name + " 작업 " + (index + 1);
+      media.hidden = true;
+      const reveal = () => { media.hidden = false; placeholder.hidden = true; };
+      media.addEventListener("error", () => {
+        media.hidden = true;
+        placeholder.hidden = false;
+        placeholder.textContent = "파일을 불러올 수 없습니다";
+      });
+      if (item.type === "video") {
+        media.controls = true;
+        media.playsInline = true;
+        media.preload = "metadata";
+        media.setAttribute("aria-label", label);
+        if (item.poster) media.poster = item.poster;
+        media.addEventListener("loadedmetadata", reveal);
+        media.addEventListener("play", () => {
+          document.querySelectorAll("video").forEach(other => { if (other !== media) other.pause(); });
+        });
+      } else {
+        media.alt = label;
+        media.loading = "eager";
+        media.addEventListener("load", reveal);
+        media.tabIndex = 0;
+        media.setAttribute("role", "button");
+        media.setAttribute("aria-label", label + " — 사진 확대");
+        media.setAttribute("aria-haspopup", "dialog");
+        media.addEventListener("click", () => openViewer(media));
+        media.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openViewer(media); }
+        });
+      }
+      frame.append(media);
+      media.src = item.src;
+    }
+    figure.append(frame);
+    if (item.caption) figure.append(element("figcaption", "", item.caption));
+    grid.append(figure);
+  });
+  if (grid.children.length) section.append(grid);
+  content.append(section);
+});
+function showAvatar() {
+  const selected = avatars.find(avatar => "#" + avatar.id === location.hash) || avatars[0];
+  if (!selected) return;
+  document.querySelectorAll(".avatar").forEach(section => { section.hidden = section.id !== selected.id; });
+  menu.querySelectorAll("a").forEach(link => {
+    if (link.hash === "#" + selected.id) link.setAttribute("aria-current", "page");
+    else link.removeAttribute("aria-current");
+  });
+  document.querySelectorAll("video").forEach(video => { if (video.closest(".avatar").hidden) video.pause(); });
+}
+
+const viewer = document.getElementById('viewer');
+const viewerImage = document.getElementById('viewer-image');
+const stage = document.getElementById('viewer-stage');
+const zoomIn = document.getElementById('zoom-in');
+const zoomOut = document.getElementById('zoom-out');
+let scale = 1, offsetX = 0, offsetY = 0, opener = null;
+const pointers = new Map();
+function renderZoom() {
+  viewerImage.style.transform = 'translate(-50%,-50%) translate(' + offsetX + 'px,' + offsetY + 'px) scale(' + scale + ')';
+  document.getElementById('zoom-level').textContent = scale.toFixed(1) + '×';
+  zoomOut.disabled = scale <= 1;
+  zoomIn.disabled = scale >= 5;
+}
+function changeZoom(next) {
+  const previous = scale;
+  scale = Math.max(1, Math.min(5, next));
+  if (scale === 1) offsetX = offsetY = 0;
+  else { offsetX *= scale / previous; offsetY *= scale / previous; }
+  renderZoom();
+}
+function openViewer(image) {
+  opener = image;
+  document.getElementById('viewer-name').textContent = image.alt;
+  viewerImage.src = image.currentSrc || image.src;
+  viewerImage.alt = image.alt;
+  scale = 1; offsetX = offsetY = 0; pointers.clear(); renderZoom();
+  document.querySelectorAll('video').forEach(video => video.pause());
+  viewer.showModal();
+  document.body.style.overflow = 'hidden';
+  document.getElementById('viewer-close').focus();
+}
+document.getElementById('viewer-close').addEventListener('click', () => viewer.close());
+viewer.addEventListener('close', () => {
+  document.body.style.overflow = '';
+  pointers.clear(); viewerImage.removeAttribute('src');
+  if (opener && opener.isConnected) opener.focus();
+});
+zoomIn.addEventListener('click', () => changeZoom(scale * 1.25));
+zoomOut.addEventListener('click', () => changeZoom(scale / 1.25));
+document.getElementById('zoom-reset').addEventListener('click', () => changeZoom(1));
+viewer.addEventListener('keydown', event => {
+  if (['+', '=', '-', '0'].includes(event.key)) {
+    event.preventDefault();
+    changeZoom(event.key === '0' ? 1 : scale * (event.key === '-' ? .8 : 1.25));
+  }
+});
+stage.addEventListener('wheel', event => {
+  event.preventDefault();
+  changeZoom(scale * Math.exp(-event.deltaY * .002));
+}, {passive:false});
+stage.addEventListener('pointerdown', event => {
+  if (event.pointerType === 'mouse' && event.button !== 0) return;
+  pointers.set(event.pointerId, {x:event.clientX,y:event.clientY});
+  stage.setPointerCapture(event.pointerId);
+});
+stage.addEventListener('pointermove', event => {
+  const old = pointers.get(event.pointerId);
+  if (!old) return;
+  const next = {x:event.clientX,y:event.clientY};
+  if (pointers.size === 2) {
+    const other = [...pointers.entries()].find(([id]) => id !== event.pointerId)[1];
+    const before = Math.hypot(old.x-other.x,old.y-other.y);
+    const after = Math.hypot(next.x-other.x,next.y-other.y);
+    if (before > 0) changeZoom(scale * after / before);
+    if (scale > 1) {offsetX += (next.x-old.x)/2; offsetY += (next.y-old.y)/2;}
+  } else if (pointers.size === 1 && scale > 1) {
+    offsetX += next.x-old.x; offsetY += next.y-old.y;
+  }
+  pointers.set(event.pointerId, next); renderZoom();
+});
+['pointerup','pointercancel','lostpointercapture'].forEach(type => stage.addEventListener(type, event => pointers.delete(event.pointerId)));
+window.addEventListener('resize', () => { if (viewer.open) changeZoom(1); });
+window.addEventListener("hashchange", showAvatar);
+showAvatar();
+</script>
+</body>
+</html>
+
+
+
